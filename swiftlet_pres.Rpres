@@ -1,0 +1,75 @@
+Swiftlet: your new text prediction App
+========================================================
+author: Konstantina Kyriakouli
+date: 15th August 2019
+autosize: true
+
+Swiftlet description
+========================================================
+
+The Swiftlet app is a simple text prediction algorithm based on n-gram models (trigram, bigram and unigram) and the Katz backoff formula. The n-gram models have been taken from sampling the big collection of the Swiftkey corpora (https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip ), after keeping randomly 20% of each supplied data set (blogs, news, and Twitter) and extensive data cleaning.
+
+**Why is text prediction useful?**
+
+Text prediction on smartphone operating systems saves the users a lot of time when typing!
+How does this work? When someone types:  "I went to the",
+the keyboard presents three options for what the next word might be. For example, three next words might be gym, store, restaurant. 
+
+And predictive keyboards on smartphones is only one successful application of predictive text technologies.
+
+
+How to use
+========================================================
+
+**The user is prompted to submit a short, incomplete sentence to see what predictions come up.**
+
+For example, a user might want to see suggestions for the incomplete sentence "I would like". They would have to type
+this at the input box and click on **"Submit"**.
+
+```{r fig.width=20, echo=FALSE}
+library(png)
+library(grid)
+img<-readPNG("pic1.png")
+grid.raster(img)
+```
+
+After some needed time (the app is made to be efficient with precalculated **Good-Turing discount coefficients, raw probabilities and leftover probabilities**),
+the prediction results will show up at the Results tab.
+
+
+Example results
+========================================================
+
+The top prediction shows up at the left of the page, and then there is a table with all possibilities.
+Results look like this: (Input text: "I am")
+
+```{r fig.width=20, echo=FALSE}
+library(png)
+library(grid)
+img<-readPNG("pic2.png")
+grid.raster(img)
+```
+
+
+How it works
+========================================================
+
+The algorithm uses only the 2 last words of a sentence for prediction of the next word. The prediction is based on an n-gram model with discounting and the Katz backoff formula (Jurafsky and Martin, 2018). As suggested by Katz, frequencies of ngrams that is less than 5 is discounted. The algorithm looks up the input words at the trigram model table, and if all predictions retrieved have a frequency of 1 (not reliable), the backoff formula to bigram and then unigram is used. The final prediction table will be cut off (only first 100 predictions are shown).
+Because everything is pre-computed and saved in a data table, the Good-Turing discount coefficients, the Katz probabilities and the leftover probabilities, the prediction is very fast. Only the initial loading of the data frames takes some time. For extra memory efficiency, the ngrams with frequency of 1 are not included in the predictions (that doesn't affect the pre-computed discount coeffiecients).
+
+References and links
+========================================================
+
+Resources:
+
+- https://en.wikipedia.org/wiki/Katz%27s_back-off_model
+- https://www.coursera.org/learn/data-science-project
+- https://web.stanford.edu/~jurafsky/slp3/3.pdf
+- https://thachtranerc.wordpress.com/2016/04/12/katzs-backoff-model-implementation-in-r/
+
+App link: https://konstantina.shinyapps.io/swiftlet/
+
+App code, supportive code and more documentation on github: https://github.com/ConnieKyr/swiftlet
+
+
+

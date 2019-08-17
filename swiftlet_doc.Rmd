@@ -1,0 +1,64 @@
+---
+title: "swiftlet_doc"
+author: "Konstantina Kyriakouli"
+date: "July 3, 2019"
+output: html_document
+---
+
+
+
+## Description
+
+The Swiftlet app has been developed in the frame of the Data Science Capstone Project by JHU on Coursera, and is a simple text prediction algorithm based on n-gram models (trigram, bigram and unigram). The n-gram models have been taken from sampling the big collection of the Swiftkey corpora (https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip ), after some cleaning (look up the extended documentation for details).
+
+Why is text prediction useful?
+A really successful example of predictive text anaytics is the Swiftkey company, who offers a keyboard application for Android phones that is considered more useful and fast than Google keyboard.
+How does this work? When someone types:
+
+"I went to the"
+
+the keyboard presents three options for what the next word might be. For example, the three words might be gym, store, restaurant. 
+
+And predictive keyboards on smartphones is only one successful application of predictive text technologies.
+
+## How to use
+
+**The user is asked to submit a short, incomplete sentence to see what predictions come up.**
+Only the last two words of the user input will be considered for the prediction.
+
+For example, a user might want to see suggestions for the incomplete sentence "I would like". They would have to type
+this at the input box and click on **"Submit"**. After some needed time (the app is made to be efficient with precalculated **Good-Turing discount coefficients, raw probabilities and leftover probabilities**),
+the prediction results will show up at the Results tab.
+
+
+## Results explanation: 
+
+The top prediction shows up at the left of the page, and then there is a table with all possibilities.
+Results look like this: (Input text: "I am")
+
+![Results table](image2.jpg)
+
+
+The next words suggested are shown in the "next word" column, whereas the respective probabilities are in the "prob" column. The most probable words show up first on the list.
+There is no limit to the suggestions! Which means that all possible results according to the corpus collection will be presented.
+
+## Prediction strategy
+
+We use only the 2 last words of a sentence for prediction of the next word. The prediction is based on an n-gram model with discounting and the Katz backoff formula (Jurafsky and Martin, 2018).
+The most intuitive way to assign probabilities to a series of events is to count up the number of occurences of each event type (like seeing a particular word or combination of words) and divide by the total number of occurences. Assigning probilities in this manner is referred to as the Maximum Likelihood Estimate (MLE) because such estimates will be higher than the actual or true probability because unobserved events (e.g. combinations of words) have not been accounted for. These unobserved events take up some of the probability mass in the true probability density function which is not accounted for in the observed distribution.
+
+We have two options, either to follow the so-called "stupid backoff" where probabilities are converted to scores, and there is no "adding up to 1" obligation anymore, or to implement a discounting scheme.
+
+In discounting, some of the probability mass is taken from observed n-grams and distributed to unobserved n-grams in order to allow us to estimate probabilities of these unseen n-grams, so that the probability mass function does not exceed 1 in the end. This discounting and re-distribution of leftover probabilities is foolowed by the Good-Turing and Kneser-Ney methods. For our purposes, we used the Good-Turing discounting. Frequencies of n-grams that are more than 0 and less than 5 (as suggested by Katz), take on a discount coeffiecient of less than 1 (they are not considered reliable but rather random), and that gives us the possibility to save up some probability mass for the lower order n-grams.
+
+## References
+
+Useful resources:
+
+- https://en.wikipedia.org/wiki/Katz%27s_back-off_model
+- https://www.coursera.org/learn/data-science-project
+- https://web.stanford.edu/~jurafsky/slp3/3.pdf
+- https://thachtranerc.wordpress.com/2016/04/12/katzs-backoff-model-implementation-in-r/
+
+
+
